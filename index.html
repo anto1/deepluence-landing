@@ -5,9 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Deepfluence — эффективная реклама у блогеров</title>
   <meta name="description" content="Deepfluence — агентство инфлюенс-маркетинга. Делаем эффективную рекламу у блогеров во всех соцсетях с 2018 года.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Deepfluence — эффективная реклама у блогеров">
+  <meta property="og:description" content="Инфлюенс-маркетинг с 2018 года. Более 2000 проектов в FMCG, beauty, tech и других нишах.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://deepfluence.ru">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="Deepfluence">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f172a'/><text x='50' y='72' font-size='64' font-weight='bold' font-family='sans-serif' text-anchor='middle' fill='white'>D</text></svg>">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
       margin: 0;
@@ -19,7 +32,9 @@
       height: 100%;
       overflow: hidden;
       font-family: 'Inter', sans-serif;
-      background: #0a0a0a;
+      font-display: swap;
+      background: #06060e;
+      color: white;
     }
 
     .page {
@@ -27,48 +42,58 @@
       width: 100%;
       height: 100vh;
       height: 100dvh;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 80%, rgba(88, 28, 135, 0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 80% 20%, rgba(30, 58, 138, 0.3) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(15, 23, 42, 0.8) 0%, transparent 80%),
+        linear-gradient(160deg, #06060e 0%, #0c1425 40%, #0f172a 100%);
+      display: flex;
+      flex-direction: column;
     }
 
-    .bg {
+    #cursorCanvas {
       position: absolute;
       inset: 0;
       z-index: 0;
+      pointer-events: none;
     }
 
-    .bg img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+    .badge {
+      display: inline-flex;
+      align-self: flex-start;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 100px;
+      padding: 6px 14px;
+      margin-bottom: 20px;
+      letter-spacing: 0.03em;
     }
 
-    .container {
-      position: absolute;
-      inset: 32px;
-      z-index: 1;
-      border: 3px solid white;
-      border-radius: 20px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #818cf8;
     }
 
     /* Header */
     .header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-    }
-
-    .header-buttons {
-      display: flex;
-      gap: 12px;
+      align-items: center;
+      padding: 32px 48px;
+      position: relative;
+      z-index: 1;
       flex-shrink: 0;
     }
 
     .logo {
-      height: 56px;
+      height: 80px;
       flex-shrink: 0;
     }
 
@@ -78,86 +103,179 @@
       display: block;
     }
 
+    .header-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 16px;
-      color: #202835;
-      background: white;
-      border: none;
-      border-radius: 8px;
-      padding: 0 24px;
-      height: 48px;
-      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
       text-decoration: none;
+      border-radius: 10px;
+      padding: 0 20px;
+      height: 40px;
+      cursor: pointer;
       white-space: nowrap;
-      flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s;
     }
 
-    .btn:hover {
-      background: #f0f0f0;
+    .btn-primary {
+      background: white;
+      color: #0f172a;
+      border: none;
     }
 
-    /* Hero content */
-    .content {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-top: 16px;
+    .btn-primary:hover {
+      background: #e2e8f0;
     }
 
-    .tagline {
-      font-weight: 700;
-      font-size: 18px;
+    .btn-outline {
+      background: transparent;
       color: white;
-      line-height: 1.4;
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
     }
 
-    .features {
-      font-weight: 400;
-      font-size: 16px;
-      color: #d7d7d7;
-      line-height: 1.5;
+    .btn-outline:hover {
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.05);
     }
 
-    .features p {
-      margin-bottom: 2px;
-    }
-
-    /* Bottom section */
-    .mobile-bottom {
+    /* Main content */
+    .main {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      justify-content: flex-end;
+      padding: 0 48px 0 48px;
+      position: relative;
+      z-index: 1;
+      max-width: 820px;
+    }
+
+    .headline {
+      font-weight: 800;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .headline span {
+      background: linear-gradient(135deg, #c084fc, #818cf8, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .description {
+      font-size: clamp(15px, 1.8vw, 18px);
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.55);
+      max-width: 540px;
+      margin-bottom: 20px;
+    }
+
+    .social-proof {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.3);
+      margin-bottom: 36px;
+      letter-spacing: 0.02em;
+    }
+
+    .stats {
+      display: flex;
+      gap: 0;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-right: 40px;
+      margin-right: 40px;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-item:last-child {
+      padding-right: 0;
+      margin-right: 0;
+      border-right: none;
+    }
+
+    .stat-value {
+      font-weight: 800;
+      font-size: clamp(28px, 3.5vw, 40px);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 400;
     }
 
     /* Footer */
     .footer {
       display: flex;
-      gap: 16px;
+      justify-content: space-between;
       align-items: center;
+      padding: 32px 48px;
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
     }
 
     .footer-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 16px;
-      color: white;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.3);
       text-decoration: none;
-      border: 3px solid white;
-      border-radius: 8px;
-      padding: 0 20px;
-      height: 48px;
-      white-space: nowrap;
+      cursor: pointer;
+      transition: color 0.15s;
     }
 
     .footer-link:hover {
-      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .footer-right {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Decorative glow */
+    .glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glow-1 {
+      width: 700px;
+      height: 500px;
+      background: rgba(99, 102, 241, 0.25);
+      top: 5%;
+      left: 15%;
+    }
+
+    .glow-2 {
+      width: 500px;
+      height: 500px;
+      background: rgba(139, 92, 246, 0.18);
+      bottom: 10%;
+      right: 10%;
+    }
+
+    /* Mobile buttons (hidden by default) */
+    .mobile-buttons {
+      display: none;
     }
 
     /* Popups */
@@ -167,6 +285,8 @@
       inset: 0;
       z-index: 100;
       background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       align-items: center;
       justify-content: center;
     }
@@ -176,10 +296,10 @@
     }
 
     .popup {
-      background: #1a1a2e;
-      border: 2px solid rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      padding: 48px;
+      background: #111827;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 40px;
       width: 100%;
       max-width: 520px;
       position: relative;
@@ -187,22 +307,21 @@
 
     .popup-title {
       font-weight: 700;
-      font-size: 28px;
-      color: white;
-      margin-bottom: 32px;
+      font-size: 22px;
+      margin-bottom: 24px;
     }
 
     .popup-close {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 16px;
+      right: 16px;
       background: none;
       border: none;
-      color: white;
-      font-size: 28px;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 24px;
       cursor: pointer;
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -210,166 +329,14 @@
     }
 
     .popup-close:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    /* Tablet */
-    @media (max-width: 1024px) {
-      .container {
-        inset: 24px;
-        padding: 20px;
-        border-radius: 16px;
-      }
-
-      .logo {
-        height: 44px;
-      }
-
-      .btn {
-        font-size: 15px;
-        height: 44px;
-        padding: 0 20px;
-      }
-
-      .tagline {
-        font-size: 16px;
-      }
-
-      .features {
-        font-size: 15px;
-      }
-
-      .footer-link {
-        font-size: 15px;
-        height: 44px;
-        padding: 0 16px;
-      }
-    }
-
-    /* Mobile */
-    @media (max-width: 768px) {
-      .container {
-        inset: 12px;
-        padding: 12px;
-        border-width: 2px;
-        border-radius: 14px;
-      }
-
-      .header {
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .logo {
-        height: auto;
-        width: 100%;
-      }
-
-      .logo img {
-        width: 100%;
-        height: auto;
-      }
-
-      .header-buttons {
-        display: none;
-      }
-
-      .tagline {
-        font-size: 16px;
-      }
-
-      .features {
-        font-size: 14px;
-      }
-
-      .mobile-buttons {
-        display: flex;
-        gap: 8px;
-      }
-
-      .btn-mobile {
-        display: flex;
-        flex: 1;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Inter', sans-serif;
-        font-weight: 700;
-        font-size: 15px;
-        color: #202835;
-        background: white;
-        border: none;
-        border-radius: 6px;
-        height: 44px;
-        cursor: pointer;
-        text-decoration: none;
-      }
-
-      .btn-mobile:hover {
-        background: #f0f0f0;
-      }
-
-      .mobile-bottom {
-        gap: 8px;
-      }
-
-      .footer {
-        gap: 8px;
-      }
-
-      .footer-link {
-        font-size: 14px;
-        border-width: 2px;
-        border-radius: 6px;
-        padding: 0 12px;
-        height: 40px;
-      }
-
-      .popup {
-        margin: 12px;
-        padding: 28px 20px;
-      }
-
-      .popup-title {
-        font-size: 20px;
-        margin-bottom: 20px;
-      }
-
-    }
-
-    /* Small mobile */
-    @media (max-width: 400px) {
-      .container {
-        border-radius: 12px;
-      }
-
-      .tagline {
-        font-size: 15px;
-      }
-
-      .features {
-        font-size: 13px;
-      }
-
-      .btn-mobile {
-        border-radius: 5px;
-      }
-
-      .footer-link {
-        font-size: 13px;
-        border-radius: 5px;
-        padding: 0 10px;
-        height: 38px;
-      }
-    }
-
-    .policies-popup {
-      max-width: 560px;
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
     }
 
     .policies-content {
-      color: rgba(255, 255, 255, 0.75);
-      font-size: 15px;
-      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 14px;
+      line-height: 1.7;
     }
 
     .policies-content p {
@@ -381,58 +348,213 @@
     }
 
     .policies-content a {
-      color: white;
+      color: rgba(255, 255, 255, 0.8);
     }
 
-    /* Mobile buttons hidden by default, shown in mobile media query */
-    .mobile-buttons {
-      display: none;
+    /* Tablet */
+    @media (max-width: 1024px) {
+      .header {
+        padding: 24px 32px;
+      }
+
+      .main {
+        padding: 0 32px;
+      }
+
+      .footer {
+        padding: 24px 32px;
+      }
+
+      .stat-item {
+        padding-right: 28px;
+        margin-right: 28px;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .header {
+        padding: 20px 20px;
+      }
+
+      .logo {
+        height: 52px;
+      }
+
+      .header-buttons {
+        display: none;
+      }
+
+      .main {
+        padding: 0 20px;
+        justify-content: flex-start;
+        padding-top: 24px;
+      }
+
+      .headline {
+        margin-bottom: 16px;
+      }
+
+      .description {
+        margin-bottom: 14px;
+        font-size: 15px;
+      }
+
+      .social-proof {
+        margin-bottom: 24px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+      }
+
+      .stat-item {
+        padding-right: 0;
+        margin-right: 0;
+        border-right: none;
+        padding-left: 16px;
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .stat-item:first-child {
+        padding-left: 0;
+        border-left: none;
+      }
+
+      .stat-value {
+        font-size: 24px;
+      }
+
+      .stat-label {
+        font-size: 11px;
+      }
+
+      .mobile-buttons {
+        display: flex;
+        gap: 8px;
+        padding: 0 20px;
+        margin-bottom: 12px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .btn-mobile {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        height: 44px;
+        border-radius: 10px;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .btn-mobile-primary {
+        background: white;
+        color: #0f172a;
+        border: none;
+      }
+
+      .btn-mobile-outline {
+        background: transparent;
+        color: white;
+        border: 1.5px solid rgba(255, 255, 255, 0.25);
+      }
+
+      .footer {
+        padding: 16px 20px;
+      }
+
+      .popup {
+        margin: 16px;
+        padding: 28px 20px;
+      }
+
+      .popup-title {
+        font-size: 18px;
+        margin-bottom: 16px;
+      }
+
+      .glow-1 {
+        width: 300px;
+        height: 250px;
+        left: 0;
+      }
+
+      .glow-2 {
+        width: 250px;
+        height: 250px;
+      }
+    }
+
+    /* Small mobile */
+    @media (max-width: 400px) {
+      .stat-value {
+        font-size: 22px;
+      }
+
+      .stat-label {
+        font-size: 10px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="page">
-    <div class="bg">
-      <img src="assets/bg.jpg" alt="">
-    </div>
+    <canvas id="cursorCanvas"></canvas>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
 
-    <div class="container">
-      <div>
-        <div class="header">
-          <div class="logo">
-            <img src="assets/logo.svg" alt="Deepfluence">
-          </div>
-          <div class="header-buttons">
-            <a href="https://t.me/dvpepper" target="_blank" class="btn">Телеграм</a>
-            <a href="mailto:info@deepfluence.ru" class="btn">Почта</a>
-          </div>
+    <header class="header">
+      <div class="logo">
+        <img src="assets/logo.svg" alt="Deepfluence">
+      </div>
+      <div class="header-buttons">
+        <a href="mailto:info@deepfluence.ru" class="btn btn-outline">Почта</a>
+        <a href="https://t.me/dvpepper" target="_blank" class="btn btn-primary">Телеграм</a>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="badge"><span class="badge-dot"></span>Сайт обновляется</div>
+      <h1 class="headline">Эффективная реклама<br>у <span>блогеров</span> во всех соцсетях</h1>
+      <p class="description">Полный цикл инфлюенс-маркетинга: подбор блогеров, запуск, контроль и аналитика. Работаем со всеми платформами и форматами — от сторис до подкастов.</p>
+      <p class="social-proof">FMCG / Beauty / Tech / E-commerce / Финансы / Образование</p>
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value">2000+</div>
+          <div class="stat-label">проектов</div>
         </div>
-
-        <div class="content">
-          <p class="tagline">Мы делаем эффективную рекламу у блогеров во всех соцсетях</p>
-          <div class="features">
-            <p>• В инфлюенс-маркетинге с 2018 года</p>
-            <p>• Более 2000 проектов и довольных клиентов</p>
-            <p>• Эксклюзивные блогеры</p>
-          </div>
+        <div class="stat-item">
+          <div class="stat-value">с 2018</div>
+          <div class="stat-label">на рынке</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">все соцсети</div>
+          <div class="stat-label">YouTube, Telegram, VK и другие</div>
         </div>
       </div>
+    </main>
 
-      <div class="mobile-bottom">
-        <div class="mobile-buttons">
-          <a href="https://t.me/dvpepper" target="_blank" class="btn-mobile">Телеграм</a>
-          <a href="mailto:info@deepfluence.ru" class="btn-mobile">Почта</a>
-        </div>
-        <div class="footer">
-          <a href="#" class="footer-link" onclick="event.preventDefault(); openPolicies()">Куки и политики</a>
-        </div>
-      </div>
+    <div class="mobile-buttons">
+      <a href="https://t.me/dvpepper" target="_blank" class="btn-mobile btn-mobile-primary">Телеграм</a>
+      <a href="mailto:info@deepfluence.ru" class="btn-mobile btn-mobile-outline">Почта</a>
     </div>
+
+    <footer class="footer">
+      <div class="footer-right">deepfluence.ru</div>
+      <a href="#" class="footer-link" onclick="event.preventDefault(); openPolicies()">Куки и политики</a>
+    </footer>
   </div>
 
   <!-- Policies popup -->
   <div class="overlay" id="policiesOverlay" onclick="closePolicies(event)">
-    <div class="popup policies-popup" onclick="event.stopPropagation()">
+    <div class="popup" onclick="event.stopPropagation()">
       <button class="popup-close" onclick="closePolicies()">&times;</button>
       <div class="popup-title">Куки и политика конфиденциальности</div>
       <div class="policies-content">
@@ -458,6 +580,292 @@
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') closePolicies();
     });
+
+    // Three.js metallic cursor
+    (function() {
+      var canvas = document.getElementById('cursorCanvas');
+      var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: false, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.0;
+      renderer.outputEncoding = THREE.sRGBEncoding;
+
+      var scene = new THREE.Scene();
+
+      // Gradient background — top to bottom
+      var bgGeo = new THREE.PlaneGeometry(2, 2);
+      var bgMat = new THREE.ShaderMaterial({
+        depthWrite: false,
+        depthTest: false,
+        uniforms: {},
+        vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, -1.0, 1.0); }',
+        fragmentShader: 'varying vec2 vUv; void main(){ vec3 top = vec3(0.14, 0.15, 0.30); vec3 mid = vec3(0.08, 0.08, 0.20); vec3 bot = vec3(0.03, 0.03, 0.09); vec3 col = mix(bot, mid, smoothstep(0.0, 0.5, vUv.y)); col = mix(col, top, smoothstep(0.5, 1.0, vUv.y)); gl_FragColor = vec4(col, 1.0); }'
+      });
+      var bgMesh = new THREE.Mesh(bgGeo, bgMat);
+      bgMesh.renderOrder = -1;
+      bgMesh.frustumCulled = false;
+      scene.add(bgMesh);
+
+      var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.z = 10;
+
+      function resize() {
+        var w = window.innerWidth;
+        var h = window.innerHeight;
+        renderer.setSize(w, h);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        visH = 2 * Math.tan(vFOV / 2) * camera.position.z;
+        visW = visH * camera.aspect;
+      }
+
+      // Cursor arrow shape (from SVG, normalized and Y-flipped)
+      var S = 1 / 150, OX = -114, OY = 204;
+      function sx(x) { return (x + OX) * S; }
+      function sy(y) { return (OY - y) * S; }
+
+      var shape = new THREE.Shape();
+      shape.moveTo(sx(163.833), sy(397.639));
+      shape.bezierCurveTo(sx(163.833), sy(403.162), sx(159.355), sy(407.639), sx(153.833), sy(407.639));
+      shape.lineTo(sx(73.8326), sy(407.639));
+      shape.bezierCurveTo(sx(68.3097), sy(407.639), sx(63.8326), sy(403.162), sx(63.8326), sy(397.639));
+      shape.lineTo(sx(63.8326), sy(237.639));
+      shape.bezierCurveTo(sx(63.8326), sy(232.116), sx(59.3554), sy(227.639), sx(53.8326), sy(227.639));
+      shape.lineTo(sx(10.0129), sy(227.639));
+      shape.bezierCurveTo(sx(2.57908), sy(227.639), sx(-2.25588), sy(219.816), sx(1.06863), sy(213.167));
+      shape.lineTo(sx(104.888), sy(5.52786));
+      shape.bezierCurveTo(sx(108.574), sy(-1.84263), sx(119.092), sy(-1.84262), sx(122.777), sy(5.52787));
+      shape.lineTo(sx(226.596), sy(213.167));
+      shape.bezierCurveTo(sx(229.921), sy(219.816), sx(225.086), sy(227.639), sx(217.652), sy(227.639));
+      shape.lineTo(sx(173.833), sy(227.639));
+      shape.bezierCurveTo(sx(168.31), sy(227.639), sx(163.833), sy(232.116), sx(163.833), sy(237.639));
+      shape.closePath();
+
+      var extrudeSettings = { depth: 0.28, bevelEnabled: true, bevelThickness: 0.06, bevelSize: 0.05, bevelSegments: 4 };
+      var geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+      geometry.center();
+
+      var material = new THREE.MeshPhysicalMaterial({
+        color: 0x0a0a18,
+        metalness: 0.95,
+        roughness: 0.1,
+        envMapIntensity: 1.2,
+        clearcoat: 0.3,
+        clearcoatRoughness: 0.2
+      });
+
+      // Fake SSS via onBeforeCompile
+      material.onBeforeCompile = function(shader) {
+        shader.uniforms.sssColor = { value: new THREE.Color(0.12, 0.08, 0.25) };
+        shader.uniforms.sssStrength = { value: 0.6 };
+        shader.uniforms.sssPower = { value: 2.5 };
+        shader.uniforms.sssDistortion = { value: 0.3 };
+
+        shader.fragmentShader = shader.fragmentShader.replace(
+          'uniform float opacity;',
+          [
+            'uniform float opacity;',
+            'uniform vec3 sssColor;',
+            'uniform float sssStrength;',
+            'uniform float sssPower;',
+            'uniform float sssDistortion;'
+          ].join('\n')
+        );
+
+        // Inject SSS into the lighting output
+        shader.fragmentShader = shader.fragmentShader.replace(
+          '#include <output_fragment>',
+          [
+            // SSS approximation: light bleeding through thin edges
+            'vec3 sssTotal = vec3(0.0);',
+            '#if NUM_DIR_LIGHTS > 0',
+            '  for (int i = 0; i < NUM_DIR_LIGHTS; i++) {',
+            '    vec3 L = directionalLights[i].direction;',
+            '    vec3 sssL = normalize(L + geometry.normal * sssDistortion);',
+            '    float sssDot = pow(clamp(dot(geometry.viewDir, -sssL), 0.0, 1.0), sssPower);',
+            '    float thickness = 1.0 - abs(dot(geometry.normal, geometry.viewDir));',
+            '    sssTotal += sssColor * directionalLights[i].color * sssDot * thickness * sssStrength;',
+            '  }',
+            '#endif',
+            // Fresnel-based edge glow (simulates thin-shell translucency)
+            'float fresnelSSS = pow(1.0 - abs(dot(geometry.normal, geometry.viewDir)), 3.0);',
+            'sssTotal += sssColor * fresnelSSS * sssStrength * 0.5;',
+            'outgoingLight += sssTotal;',
+            '#include <output_fragment>'
+          ].join('\n')
+        );
+      };
+
+      // HDR-like environment map via PMREMGenerator
+      var pmremGen = new THREE.PMREMGenerator(renderer);
+      pmremGen.compileCubemapShader();
+
+      var envScene = new THREE.Scene();
+      // HDR sky dome with hot spots for realistic metallic reflections
+      var skyGeo = new THREE.SphereGeometry(50, 64, 64);
+      var skyMat = new THREE.ShaderMaterial({
+        side: THREE.BackSide,
+        uniforms: {},
+        vertexShader: 'varying vec3 vPos; void main(){ vPos = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+        fragmentShader: [
+          'varying vec3 vPos;',
+          'void main(){',
+          '  vec3 n = normalize(vPos);',
+          '  float t = n.y * 0.5 + 0.5;',
+          // Base dark gradient
+          '  vec3 c1 = vec3(0.005, 0.005, 0.02);',
+          '  vec3 c2 = vec3(0.04, 0.035, 0.12);',
+          '  vec3 c3 = vec3(0.08, 0.1, 0.25);',
+          '  vec3 col = mix(c1, c2, smoothstep(0.0, 0.35, t));',
+          '  col = mix(col, c3, smoothstep(0.35, 1.0, t));',
+          // Hot spot 1 — bright key light reflection (upper right)
+          '  vec3 lightDir1 = normalize(vec3(0.5, 0.7, 0.5));',
+          '  float spot1 = pow(max(dot(n, lightDir1), 0.0), 64.0);',
+          '  col += vec3(1.2, 1.3, 1.8) * spot1;',
+          // Hot spot 2 — softer fill (upper left)
+          '  vec3 lightDir2 = normalize(vec3(-0.6, 0.4, 0.3));',
+          '  float spot2 = pow(max(dot(n, lightDir2), 0.0), 32.0);',
+          '  col += vec3(0.4, 0.3, 0.8) * spot2;',
+          // Hot spot 3 — rim glow (behind-below)
+          '  vec3 lightDir3 = normalize(vec3(0.0, -0.3, -0.8));',
+          '  float spot3 = pow(max(dot(n, lightDir3), 0.0), 16.0);',
+          '  col += vec3(0.15, 0.2, 0.5) * spot3;',
+          // Horizon glow
+          '  float horizon = 1.0 - abs(n.y);',
+          '  col += vec3(0.03, 0.04, 0.1) * pow(horizon, 4.0);',
+          '  gl_FragColor = vec4(col, 1.0);',
+          '}'
+        ].join('\n')
+      });
+      envScene.add(new THREE.Mesh(skyGeo, skyMat));
+
+      var cubeRT = new THREE.WebGLCubeRenderTarget(512);
+      var cubeCamera = new THREE.CubeCamera(0.1, 100, cubeRT);
+      cubeCamera.update(renderer, envScene);
+
+      var envMap = pmremGen.fromCubemap(cubeRT.texture).texture;
+      material.envMap = envMap;
+      scene.environment = envMap;
+      pmremGen.dispose();
+
+      var cursor = new THREE.Mesh(geometry, material);
+      cursor.scale.set(4.55, 4.55, 4.55);
+      scene.add(cursor);
+
+      // Background arrow — bigger, flat, dark, rotates opposite
+      var bgArrowGeo = new THREE.ShapeGeometry(shape);
+      bgArrowGeo.center();
+      var bgArrowMat = new THREE.MeshBasicMaterial({
+        color: 0x000000,
+        transparent: true,
+        opacity: 0.3,
+        side: THREE.DoubleSide
+      });
+      var bgArrow = new THREE.Mesh(bgArrowGeo, bgArrowMat);
+      bgArrow.scale.set(16, 16, 16);
+      bgArrow.position.set(2.5, 0, -8);
+      scene.add(bgArrow);
+
+      // Lighting
+      var ambientLight = new THREE.AmbientLight(0x0a0a18, 0.2);
+      scene.add(ambientLight);
+
+      var keyLight = new THREE.DirectionalLight(0x606888, 0.6);
+      keyLight.position.set(3, 5, 4);
+      scene.add(keyLight);
+
+      var fillLight = new THREE.DirectionalLight(0x302850, 0.2);
+      fillLight.position.set(-4, 2, 3);
+      scene.add(fillLight);
+
+      var rimLight = new THREE.DirectionalLight(0x304088, 0.2);
+      rimLight.position.set(0, -3, -2);
+      scene.add(rimLight);
+
+      var edgeLight = new THREE.SpotLight(0x8898cc, 1.0, 30, Math.PI / 6, 0.5);
+      edgeLight.position.set(-5, 3, 6);
+      edgeLight.target = cursor;
+      scene.add(edgeLight);
+
+      // Base position (right side)
+      var baseX = 3.2;
+      var baseY = 0.2;
+      cursor.position.set(baseX, baseY, 0);
+
+      // Visible world dimensions at z=0
+      var vFOV = camera.fov * Math.PI / 180;
+      var visH = 2 * Math.tan(vFOV / 2) * camera.position.z;
+      var visW = visH * camera.aspect;
+
+      resize();
+      window.addEventListener('resize', resize);
+
+      // Mouse tracking
+      var mouse = { x: 0.5, y: 0.5 };
+      var currentPosX = baseX;
+      var currentPosY = baseY;
+      var currentZ = 0;
+      var targetZ = 0;
+      var currentTiltX = 0;
+      var currentTiltY = 0;
+      var spinAngle = 0;
+
+      document.addEventListener('mousemove', function(e) {
+        mouse.x = e.clientX / window.innerWidth;
+        mouse.y = e.clientY / window.innerHeight;
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+
+        // Convert mouse to world coords
+        var mouseWorldX = (mouse.x - 0.5) * visW;
+        var mouseWorldY = -(mouse.y - 0.5) * visH;
+
+        // Smooth position — cursor drifts toward mouse, anchored to base
+        var moveStrength = 0.25;
+        var targetPosX = baseX + (mouseWorldX - baseX) * moveStrength;
+        var targetPosY = baseY + (mouseWorldY - baseY) * moveStrength;
+        currentPosX += (targetPosX - currentPosX) * 0.006;
+        currentPosY += (targetPosY - currentPosY) * 0.006;
+        cursor.position.x = currentPosX;
+        cursor.position.y = currentPosY;
+
+        // Direction from cursor to mouse — tip points at mouse
+        var dx = mouseWorldX - currentPosX;
+        var dy = mouseWorldY - currentPosY;
+        var angle = Math.atan2(dy, dx);
+
+        targetZ = angle - Math.PI / 2;
+
+        // Handle angle wrapping for smooth interpolation
+        var diff = targetZ - currentZ;
+        if (diff > Math.PI) currentZ += Math.PI * 2;
+        if (diff < -Math.PI) currentZ -= Math.PI * 2;
+
+        // 3D tilt toward mouse
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var tiltAmount = Math.min(dist * 0.1, 0.9);
+        var targetTiltX = -Math.sin(angle) * tiltAmount;
+        var targetTiltY = Math.cos(angle) * tiltAmount;
+
+        // Smooth interpolation — slow, heavy inertia
+        currentZ += (targetZ - currentZ) * 0.025;
+        currentTiltX += (targetTiltX - currentTiltX) * 0.025;
+        currentTiltY += (targetTiltY - currentTiltY) * 0.025;
+
+        // Apply mouse-driven rotation + continuous spin on local Y
+        spinAngle += 0.0018;
+        cursor.rotation.set(currentTiltX, currentTiltY, currentZ);
+        cursor.rotateY(spinAngle);
+
+        // Background arrow — slow reverse rotation
+        bgArrow.rotation.z -= 0.001;
+
+        renderer.render(scene, camera);
+      }
+      animate();
+    })();
   </script>
 </body>
 </html>

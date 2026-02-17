@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deepfluence — эффективная реклама у блогеров</title>
+  <meta name="description" content="Deepfluence — агентство инфлюенс-маркетинга. Делаем эффективную рекламу у блогеров во всех соцсетях с 2018 года.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a;
+    }
+
+    .page {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+    }
+
+    .bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .container {
+      position: absolute;
+      inset: 32px;
+      z-index: 1;
+      border: 3px solid white;
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      height: 56px;
+      flex-shrink: 0;
+    }
+
+    .logo img {
+      height: 100%;
+      width: auto;
+      display: block;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: #202835;
+      background: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0 24px;
+      height: 48px;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .btn:hover {
+      background: #f0f0f0;
+    }
+
+    /* Hero content */
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .tagline {
+      font-weight: 700;
+      font-size: 18px;
+      color: white;
+      line-height: 1.4;
+    }
+
+    .features {
+      font-weight: 400;
+      font-size: 16px;
+      color: #d7d7d7;
+      line-height: 1.5;
+    }
+
+    .features p {
+      margin-bottom: 2px;
+    }
+
+    /* Bottom section */
+    .mobile-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Footer */
+    .footer {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .footer-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: white;
+      text-decoration: none;
+      border: 3px solid white;
+      border-radius: 8px;
+      padding: 0 20px;
+      height: 48px;
+      white-space: nowrap;
+    }
+
+    .footer-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Popups */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.7);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .overlay.active {
+      display: flex;
+    }
+
+    .popup {
+      background: #1a1a2e;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 48px;
+      width: 100%;
+      max-width: 520px;
+      position: relative;
+    }
+
+    .popup-title {
+      font-weight: 700;
+      font-size: 28px;
+      color: white;
+      margin-bottom: 32px;
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+
+    .popup-close:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+      .container {
+        inset: 24px;
+        padding: 20px;
+        border-radius: 16px;
+      }
+
+      .logo {
+        height: 44px;
+      }
+
+      .btn {
+        font-size: 15px;
+        height: 44px;
+        padding: 0 20px;
+      }
+
+      .tagline {
+        font-size: 16px;
+      }
+
+      .features {
+        font-size: 15px;
+      }
+
+      .footer-link {
+        font-size: 15px;
+        height: 44px;
+        padding: 0 16px;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .container {
+        inset: 12px;
+        padding: 12px;
+        border-width: 2px;
+        border-radius: 14px;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .logo {
+        height: auto;
+        width: 100%;
+      }
+
+      .logo img {
+        width: 100%;
+        height: auto;
+      }
+
+      .header-buttons {
+        display: none;
+      }
+
+      .tagline {
+        font-size: 16px;
+      }
+
+      .features {
+        font-size: 14px;
+      }
+
+      .mobile-buttons {
+        display: flex;
+        gap: 8px;
+      }
+
+      .btn-mobile {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        color: #202835;
+        background: white;
+        border: none;
+        border-radius: 6px;
+        height: 44px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .btn-mobile:hover {
+        background: #f0f0f0;
+      }
+
+      .mobile-bottom {
+        gap: 8px;
+      }
+
+      .footer {
+        gap: 8px;
+      }
+
+      .footer-link {
+        font-size: 14px;
+        border-width: 2px;
+        border-radius: 6px;
+        padding: 0 12px;
+        height: 40px;
+      }
+
+      .popup {
+        margin: 12px;
+        padding: 28px 20px;
+      }
+
+      .popup-title {
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+
+    }
+
+    /* Small mobile */
+    @media (max-width: 400px) {
+      .container {
+        border-radius: 12px;
+      }
+
+      .tagline {
+        font-size: 15px;
+      }
+
+      .features {
+        font-size: 13px;
+      }
+
+      .btn-mobile {
+        border-radius: 5px;
+      }
+
+      .footer-link {
+        font-size: 13px;
+        border-radius: 5px;
+        padding: 0 10px;
+        height: 38px;
+      }
+    }
+
+    .policies-popup {
+      max-width: 560px;
+    }
+
+    .policies-content {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .policies-content p {
+      margin-bottom: 12px;
+    }
+
+    .policies-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .policies-content a {
+      color: white;
+    }
+
+    /* Mobile buttons hidden by default, shown in mobile media query */
+    .mobile-buttons {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="bg">
+      <img src="assets/bg.jpg" alt="">
+    </div>
+
+    <div class="container">
+      <div>
+        <div class="header">
+          <div class="logo">
+            <img src="assets/logo.svg" alt="Deepfluence">
+          </div>
+          <div class="header-buttons">
+            <a href="https://t.me/dvpepper" target="_blank" class="btn">Телеграм</a>
+            <a href="mailto:info@deepfluence.ru" class="btn">Почта</a>
+          </div>
+        </div>
+
+        <div class="content">
+          <p class="tagline">Мы делаем эффективную рекламу у блогеров во всех соцсетях</p>
+          <div class="features">
+            <p>• В инфлюенс-маркетинге с 2018 года</p>
+            <p>• Более 2000 проектов и довольных клиентов</p>
+            <p>• Эксклюзивные блогеры</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mobile-bottom">
+        <div class="mobile-buttons">
+          <a href="https://t.me/dvpepper" target="_blank" class="btn-mobile">Телеграм</a>
+          <a href="mailto:info@deepfluence.ru" class="btn-mobile">Почта</a>
+        </div>
+        <div class="footer">
+          <a href="#" class="footer-link" onclick="event.preventDefault(); openPolicies()">Куки и политики</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Policies popup -->
+  <div class="overlay" id="policiesOverlay" onclick="closePolicies(event)">
+    <div class="popup policies-popup" onclick="event.stopPropagation()">
+      <button class="popup-close" onclick="closePolicies()">&times;</button>
+      <div class="popup-title">Куки и политика конфиденциальности</div>
+      <div class="policies-content">
+        <p>Данный сайт использует файлы cookie исключительно для обеспечения корректной работы и улучшения вашего опыта. Мы не передаём ваши данные третьим лицам и не используем их в рекламных целях.</p>
+        <p>Мы не собираем и не храним персональные данные посетителей сайта. Для связи с нами используйте Телеграм или электронную почту — вся коммуникация происходит напрямую через эти каналы.</p>
+        <p>Продолжая использовать сайт, вы соглашаетесь с нашей политикой в отношении файлов cookie.</p>
+        <p>По любым вопросам, связанным с конфиденциальностью, вы можете написать нам на <a href="mailto:info@deepfluence.ru">info@deepfluence.ru</a>.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openPolicies() {
+      document.getElementById('policiesOverlay').classList.add('active');
+    }
+
+    function closePolicies(e) {
+      if (!e || e.target === e.currentTarget) {
+        document.getElementById('policiesOverlay').classList.remove('active');
+      }
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePolicies();
+    });
+  </script>
+</body>
+</html>
