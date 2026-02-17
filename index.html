@@ -378,7 +378,7 @@
       }
 
       .logo {
-        height: 52px;
+        height: 44px;
       }
 
       .header-buttons {
@@ -387,21 +387,29 @@
 
       .main {
         padding: 0 20px;
-        justify-content: flex-start;
-        padding-top: 24px;
+        justify-content: flex-end;
+        padding-bottom: 0;
+      }
+
+      .badge {
+        font-size: 11px;
+        padding: 5px 12px;
+        margin-bottom: 14px;
       }
 
       .headline {
-        margin-bottom: 16px;
+        font-size: 28px;
+        margin-bottom: 14px;
       }
 
       .description {
-        margin-bottom: 14px;
-        font-size: 15px;
+        margin-bottom: 12px;
+        font-size: 14px;
       }
 
       .social-proof {
-        margin-bottom: 24px;
+        margin-bottom: 20px;
+        font-size: 12px;
       }
 
       .stats {
@@ -424,7 +432,7 @@
       }
 
       .stat-value {
-        font-size: 24px;
+        font-size: 22px;
       }
 
       .stat-label {
@@ -470,6 +478,14 @@
         padding: 16px 20px;
       }
 
+      .footer-right {
+        font-size: 12px;
+      }
+
+      .footer-link {
+        font-size: 12px;
+      }
+
       .popup {
         margin: 16px;
         padding: 28px 20px;
@@ -494,8 +510,16 @@
 
     /* Small mobile */
     @media (max-width: 400px) {
+      .logo {
+        height: 36px;
+      }
+
+      .headline {
+        font-size: 24px;
+      }
+
       .stat-value {
-        font-size: 22px;
+        font-size: 20px;
       }
 
       .stat-label {
@@ -787,10 +811,17 @@
       edgeLight.target = cursor;
       scene.add(edgeLight);
 
-      // Base position (right side)
-      var baseX = 3.2;
-      var baseY = 0.2;
+      // Base position — adjust for mobile
+      var isMobile = window.innerWidth <= 768;
+      var baseX = isMobile ? 1.0 : 3.2;
+      var baseY = isMobile ? 1.8 : 0.2;
       cursor.position.set(baseX, baseY, 0);
+
+      if (isMobile) {
+        cursor.scale.set(3.0, 3.0, 3.0);
+        bgArrow.scale.set(10, 10, 10);
+        bgArrow.position.set(1.0, 1.0, -8);
+      }
 
       // Visible world dimensions at z=0
       var vFOV = camera.fov * Math.PI / 180;
@@ -814,6 +845,12 @@
         mouse.x = e.clientX / window.innerWidth;
         mouse.y = e.clientY / window.innerHeight;
       });
+
+      document.addEventListener('touchmove', function(e) {
+        var t = e.touches[0];
+        mouse.x = t.clientX / window.innerWidth;
+        mouse.y = t.clientY / window.innerHeight;
+      }, { passive: true });
 
       function animate() {
         requestAnimationFrame(animate);
