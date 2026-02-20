@@ -378,7 +378,13 @@
       }
 
       .logo {
-        height: 44px;
+        height: auto;
+        width: 75%;
+      }
+
+      .logo img {
+        width: 100%;
+        height: auto;
       }
 
       .header-buttons {
@@ -443,6 +449,7 @@
         display: flex;
         gap: 8px;
         padding: 0 20px;
+        margin-top: 20px;
         margin-bottom: 12px;
         position: relative;
         z-index: 1;
@@ -476,14 +483,17 @@
 
       .footer {
         padding: 16px 20px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
       }
 
       .footer-right {
-        font-size: 12px;
+        font-size: 11px;
       }
 
       .footer-link {
-        font-size: 12px;
+        font-size: 11px;
       }
 
       .popup {
@@ -571,8 +581,8 @@
     </div>
 
     <footer class="footer">
-      <div class="footer-right">deepfluence.ru</div>
-      <a href="#" class="footer-link" onclick="event.preventDefault(); openPolicies()">Куки и политики</a>
+      <div class="footer-right">ИП Перепелица Дмитрий Валерьевич ИНН 324301560808</div>
+      <a href="df-policy.pdf" target="_blank" class="footer-link">Политика конфиденциальности</a>
     </footer>
   </div>
 
